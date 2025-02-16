@@ -1,0 +1,24 @@
+User Service (Регистрация, авторизация, профили)
+
+    users — информация о пользователях.
+    cart — корзина пользователя.
+    cart_items — товары в корзине.
+
+Order Service (Корзина, заказы, статусы)
+
+    orders — заказы пользователей.
+    order_items — товары в заказах.
+
+Payment Service (Обработка платежей)
+
+    payments — статус платежей, транзакции.
+
+Product Service (Каталог товаров)
+
+    products — информация о товарах.
+    categories — категории товаров.
+
+Review & Recommendation Service (Отзывы, рекомендации)
+
+    reviews — отзывы пользователей.
+    recommendations — рекомендации товаров.
