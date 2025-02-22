@@ -1,4 +1,4 @@
-package ru.petproject.ecommerce.user_service;
+package ru.petproject.ecommerce.user_service.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
