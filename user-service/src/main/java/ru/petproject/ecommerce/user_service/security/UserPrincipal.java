@@ -1,6 +1,6 @@
 package ru.petproject.ecommerce.user_service.security;
 
-import com.example.userservice.model.User;
+import ru.petproject.ecommerce.user_service.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,6 +13,10 @@ public class UserPrincipal implements UserDetails {
 
     public UserPrincipal(User user) {
         this.user = user;
+    }
+
+    public Long getId() {
+        return user.getUserId(); // Предполагается, что в классе User есть метод getUserId()
     }
 
     @Override

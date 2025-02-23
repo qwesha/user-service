@@ -1,12 +1,12 @@
 package ru.petproject.ecommerce.user_service.controller;
 
-import com.example.userservice.dto.JwtAuthenticationResponse;
-import com.example.userservice.dto.LoginRequest;
-import com.example.userservice.dto.SignUpRequest;
-import com.example.userservice.kafka.KafkaProducer;
-import com.example.userservice.model.User;
-import com.example.userservice.repository.UserRepository;
-import com.example.userservice.security.JwtTokenProvider;
+import ru.petproject.ecommerce.user_service.dto.JwtAuthenticationResponse;
+import ru.petproject.ecommerce.user_service.dto.LoginRequest;
+import ru.petproject.ecommerce.user_service.dto.SignUpRequest;
+import ru.petproject.ecommerce.user_service.kafka.KafkaProducer;
+import ru.petproject.ecommerce.user_service.model.User;
+import ru.petproject.ecommerce.user_service.repository.UserRepository;
+import ru.petproject.ecommerce.user_service.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/auth")

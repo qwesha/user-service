@@ -1,17 +1,28 @@
 package ru.petproject.ecommerce.user_service.security;
 
+import ru.petproject.ecommerce.user_service.model.User;
+import ru.petproject.ecommerce.user_service.repository.UserRepository;
+import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtTokenProvider tokenProvider;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -23,7 +34,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Long userId = tokenProvider.getUserIdFromJWT(jwt);
 
                 // Загружаем пользователя из базы данных
-                User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                User user = userRepository.findById(userId)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
                 UserPrincipal userPrincipal = new UserPrincipal(user);
 
                 // Создаем объект Authentication и устанавливаем его в SecurityContext
