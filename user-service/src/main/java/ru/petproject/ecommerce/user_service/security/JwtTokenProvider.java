@@ -2,6 +2,7 @@ package ru.petproject.ecommerce.user_service.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +11,11 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private String jwtSecret = "your-secret-key";
-    private int jwtExpirationInMs = 86400000; // 24 hours
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    @Value("${jwt.expiration}")
+    private int jwtExpirationInMs;
 
     public String generateToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
