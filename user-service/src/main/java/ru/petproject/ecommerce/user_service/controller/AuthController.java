@@ -1,5 +1,7 @@
 package ru.petproject.ecommerce.user_service.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import ru.petproject.ecommerce.user_service.dto.JwtAuthenticationResponse;
 import ru.petproject.ecommerce.user_service.dto.LoginRequest;
 import ru.petproject.ecommerce.user_service.dto.SignUpRequest;
@@ -21,6 +23,7 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -36,18 +39,23 @@ public class AuthController {
     @Autowired
     private KafkaProducer kafkaProducer;
 
+
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+            String jwt = tokenProvider.generateToken(authentication);
+            return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        }
     }
 
     @PostMapping("/signup")

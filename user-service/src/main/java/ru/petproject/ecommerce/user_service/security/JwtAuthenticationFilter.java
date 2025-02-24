@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -38,12 +40,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
                 UserPrincipal userPrincipal = new UserPrincipal(user);
 
-                // Создаем объект Authentication и устанавливаем его в SecurityContext
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userPrincipal, null, userPrincipal.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                // Проверяем, что пользователь еще не аутентифицирован
+                if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                    // Создаем объект Authentication и устанавливаем его в SecurityContext
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userPrincipal, null, userPrincipal.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);

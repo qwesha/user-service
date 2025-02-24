@@ -4,8 +4,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/userdb
-    username: georg
-    password: password
+    username: geo
+    password: 14168779
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -15,5 +15,12 @@ spring:
     bootstrap-servers: localhost:9092
 
 jwt:
-  secret: your-secret-key
   expiration: 86400000 # 24 hours
+
+logging:
+  level:
+    org.springframework.aop: DEBUG
+    org.springframework.beans: DEBUG
+    org.springframework.transaction: DEBUG
+    root: INFO
+    ru.petproject.ecommerce.user_service.security.JwtTokenProvider: DEBUG

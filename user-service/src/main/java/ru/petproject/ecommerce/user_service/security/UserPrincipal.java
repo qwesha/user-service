@@ -2,6 +2,7 @@ package ru.petproject.ecommerce.user_service.security;
 
 import ru.petproject.ecommerce.user_service.model.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -21,7 +22,8 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        // Возвращаем роль пользователя как GrantedAuthority
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
     }
 
     @Override

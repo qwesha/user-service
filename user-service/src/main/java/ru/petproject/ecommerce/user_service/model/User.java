@@ -5,8 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
+@Table(name = "users")
 @Getter
 @Setter
 @ToString(exclude = {"password", "createdAt"})
@@ -75,11 +77,11 @@ public class User {
 
         User user = (User) o;
 
-        return email != null ? email.equals(user.email) : user.email == null;
+        return Objects.equals(userId, user.userId);
     }
 
     @Override
     public int hashCode() {
-        return email != null ? email.hashCode() : 0;
+        return userId != null ? userId.hashCode() : 0;
     }
 }
