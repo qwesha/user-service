@@ -17,7 +17,6 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private int jwtExpirationInMs;
 
-    // Генерация безопасного ключа для HS512
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     public String generateToken(Authentication authentication) {
@@ -26,34 +25,34 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId())) // Устанавливаем subject (ID пользователя)
-                .setIssuedAt(now) // Время создания токена
-                .setExpiration(expiryDate) // Время истечения токена
-                .signWith(secretKey, SignatureAlgorithm.HS512) // Подписываем токен с использованием безопасного ключа
+                .setSubject(Long.toString(userPrincipal.getId()))
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
     }
 
     public Long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(secretKey) // Указываем ключ для проверки подписи
+                .setSigningKey(secretKey)
                 .build()
-                .parseClaimsJws(token) // Парсим токен и проверяем подпись
-                .getBody(); // Получаем тело токена (claims)
+                .parseClaimsJws(token)
+                .getBody();
 
-        return Long.parseLong(claims.getSubject()); // Возвращаем ID пользователя из subject
+        return Long.parseLong(claims.getSubject());
     }
 
     public boolean validateToken(String authToken) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(secretKey) // Указываем ключ для проверки подписи
+                    .setSigningKey(secretKey)
                     .build()
-                    .parseClaimsJws(authToken); // Парсим токен и проверяем подпись
-            return true; // Токен валиден
+                    .parseClaimsJws(authToken);
+            return true;
         } catch (Exception ex) {
-            // Логирование ошибки
+
             System.err.println("Ошибка при валидации токена: " + ex.getMessage());
-            return false; // Токен невалиден
+            return false;
         }
     }
 }
