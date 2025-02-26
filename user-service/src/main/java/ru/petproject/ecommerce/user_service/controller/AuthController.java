@@ -41,9 +41,6 @@ public class AuthController {
     private KafkaProducer kafkaProducer;
 
 
-
-
-
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
